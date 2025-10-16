@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Please Wait...</title>
+<style>
+:root {
+  --bg: #151515;
+  --accent: #7C4DFF;
+  --muted: #aaa;
+  --radius: 8px;
+}
+* {box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
+html, body {
+  height:100%;
+  background:var(--bg);
+  font-family: 'Inter', sans-serif;
+  color:white;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+.loader {
+  position:relative;
+  width:120px;
+  height:120px;
+  margin-bottom:32px;
+}
+.loader::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  border:6px solid rgba(255,255,255,0.08);
+  border-top-color:var(--accent);
+  border-radius:50%;
+  animation:spin 1.5s linear infinite;
+}
+.loader img {
+  position:absolute;
+  width:50%;
+  height:50%;
+  top:25%;
+  left:25%;
+  object-fit:contain;
+  pointer-events:none;
+}
+h1 {
+  font-size:1.4rem;
+  font-weight:700;
+  margin-bottom:6px;
+  background:linear-gradient(90deg,var(--accent),#b388ff,var(--accent));
+  background-size:200% auto;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:gradientMove 4s ease-in-out infinite;
+}
+p {
+  font-size:0.9rem;
+  color:var(--muted);
+  margin-bottom:48px;
+}
+.footer {
+  position:fixed;
+  bottom:20px;
+  text-align:center;
+  width:100%;
+  font-size:0.85rem;
+}
+.footer a {
+  color:var(--accent);
+  text-decoration:none;
+  font-weight:600;
+}
+@keyframes spin {
+  to {transform:rotate(360deg);}
+}
+@keyframes gradientMove {
+  0% {background-position:0% 50%;}
+  50% {background-position:100% 50%;}
+  100% {background-position:0% 50%;}
+}
+@media (max-width:600px) {
+  .loader {width:80px; height:80px;}
+  h1 {font-size:1.2rem;}
+  p {font-size:0.85rem;}
+}
+</style>
+</head>
+<body>
+  <div class="loader">
+    <img src="https://teamalphabyte.github.io/Music/assets/media/icons/pre-loader.png" alt="PreLoader">
+  </div>
+  <h1>Verifying Your Connection...</h1>
+  <p>Please wait a moment while we verify that you are human.</p>
+
+  <div class="footer">
+    <span>Powered by</span> <a href="#">AlphaByte Developments</a>
+  </div>
+
+<script>
+async function detectSuspiciousActivity() {
+  let suspicious = [];
+  try {
+    const pc = new RTCPeerConnection({iceServers:[]});
+    pc.createDataChannel("");
+    pc.createOffer().then(offer => pc.setLocalDescription(offer));
+    pc.onicecandidate = event => {
+      if (event && event.candidate && event.candidate.candidate) {
+        const cand = event.candidate.candidate;
+        if (cand.includes("relay") || cand.includes("proxy")) suspicious.push("VPN/Proxy detected (relay candidate)");
+      }
+    };
+    setTimeout(()=>pc.close(), 1000);
+  } catch(e){}
+
+  try {
+    const dnsCheck = await fetch("https://1.1.1.1/cdn-cgi/trace").then(r=>r.text());
+    if (!dnsCheck.includes("warp=off")) suspicious.push("Custom DNS or WARP detected");
+  } catch(e){
+    suspicious.push("DNS or Tor anomaly detected");
+  }
+
+  const ua = navigator.userAgent.toLowerCase();
+  if (ua.includes("tor") || ua.includes("tbb")) suspicious.push("Tor browser detected");
+
+  return suspicious;
+}
+
+(async()=>{
+  const issues = await detectSuspiciousActivity();
+  if (issues.length > 0) {
+    document.querySelector("h1").textContent = "Connection Verified with Warnings";
+    document.querySelector("p").textContent = "We detected potential VPN, proxy, or Tor usage. You may proceed shortly...";
+  }
+
+  setTimeout(()=>{
+    const params = new URLSearchParams(window.location.search);
+    const next = params.get("next") || "https://teamalphabyte.github.io/Music/website/home.html";
+    window.location.href = next;
+  }, 3000);
+})();
+</script>
+</body>
+</html>

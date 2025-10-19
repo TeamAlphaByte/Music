@@ -1,1 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Remixes</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Inter, Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  body {
+    background: #121212;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    padding: 15px 0;
+  }
+  nav a {
+    color: #a64cf5;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: opacity 0.2s ease;
+  }
+  nav a:hover {
+    opacity: 0.8;
+  }
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+  }
+  .search-wrapper {
+    width: 90%;
+    max-width: 900px;
+    margin-bottom: 30px;
+  }
+  .search-bar {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    padding: 10px 15px;
+    width: 100%;
+  }
+  .search-bar img {
+    width: 22px;
+    height: 22px;
+    margin-right: 10px;
+    filter: brightness(0) invert(1);
+  }
+  .search-bar input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 0.95rem;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 25px;
+  }
+  header h3 {
+    font-size: 1.6rem;
+    color: #a64cf5;
+  }
+  header p {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-top: 6px;
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 90%;
+    max-width: 900px;
+  }
+  .card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    padding: 18px 20px;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .card:hover {
+    transform: scale(1.02);
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .card-top b {
+    font-size: 1rem;
+    color: #c792ea;
+  }
+  .card-icons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border: 1px solid rgba(166, 76, 245, 0.4);
+    border-radius: 999px;
+    background: transparent;
+    transition: transform 0.2s ease, border 0.2s ease;
+  }
+  .pill:hover {
+    transform: scale(1.05);
+    border-color: #a64cf5;
+  }
+  .pill img {
+    width: 22px;
+    height: 22px;
+    filter: brightness(0) invert(1);
+    cursor: pointer;
+  }
+  .pill span {
+    font-size: 0.85rem;
+    color: #a64cf5;
+  }
+  .card-content {
+    margin-top: 10px;
+    font-size: 0.85rem;
+    opacity: 0.8;
+    line-height: 1.4em;
+  }
+  .card-tags {
+    margin-top: 12px;
+  }
+  .card-tags b {
+    display: block;
+    margin-bottom: 6px;
+    color: #fff;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tag {
+    background: rgba(166, 76, 245, 0.15);
+    border: 1px solid rgba(166, 76, 245, 0.4);
+    color: #a64cf5;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+  }
+  footer {
+    text-align: center;
+    font-size: 0.85rem;
+    opacity: 0.8;
+    margin: 20px 0;
+  }
+  footer a {
+    color: #a64cf5;
+    text-decoration: none;
+    margin-left: 4px;
+  }
+  footer a:hover {
+    text-decoration: underline;
+  }
+  @media(max-width: 900px) {
+    header h3 {
+      font-size: 1.5rem;
+    }
+    header p {
+      font-size: 0.85rem;
+    }
+    .card {
+      padding: 16px;
+    }
+  }
+  @media(max-width: 768px) {
+    nav {
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    nav a {
+      font-size: 0.95rem;
+    }
+    .card-top {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .card-icons {
+      align-self: flex-end;
+    }
+    .container,
+    .search-wrapper {
+      width: 95%;
+    }
+  }
+  @media(max-width: 600px) {
+    header h3 {
+      font-size: 1.3rem;
+    }
+    header p {
+      font-size: 0.8rem;
+    }
+    .search-bar {
+      padding: 8px 12px;
+    }
+    .search-bar img {
+      width: 20px;
+      height: 20px;
+    }
+    .card-content {
+      font-size: 0.8rem;
+    }
+    .tag {
+      font-size: 0.75rem;
+    }
+    .pill span {
+      font-size: 0.8rem;
+    }
+  }
+  @media(max-width: 400px) {
+    nav a {
+      font-size: 0.85rem;
+    }
+    header h3 {
+      font-size: 1.2rem;
+    }
+    header p {
+      font-size: 0.75rem;
+    }
+    .card-top b {
+      font-size: 0.9rem;
+    }
+    .pill img {
+      width: 20px;
+      height: 20px;
+    }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a href="https://teamalphabyte.github.io/Music/website/originals.html">Originals</a>
+  <a href="https://teamalphabyte.github.io/Music/website/remixes.html">Remixes</a>
+  <a href="https://teamalphabyte.github.io/Music/website/instrumentals.html">Instrumentals</a>
+  <a href="https://teamalphabyte.github.io/Music/website/information.html">Information</a>
+</nav>
+<main>
+  <div class="search-wrapper">
+    <div class="search-bar">
+      <img src="https://teamalphabyte.github.io/Music/assets/media/icons/search.png" alt="Search Icon" />
+      <input type="text" id="search" placeholder="Search..." />
+    </div>
+  </div>
+  <header>
+    <h3>Remixes</h3>
+    <p>Play or download our remixes.</p>
+  </header>
+  <div class="container" id="content">
+    <div class="card" data-keywords="#" data-id="remix1">
+      <div class="card-top">
+        <b>Breathe (AlphaByte House Remix)</b>
+        <div class="card-icons">
+          <div class="pill">
+            <img src="https://teamalphabyte.github.io/Music/assets/media/icons/play.png" alt="Play" class="play-btn" data-audio="#" />
+            <span class="play-count">27</span>
+          </div>
+          <div class="pill">
+            <a href="#" download>
+              <img src="https://teamalphabyte.github.io/Music/assets/media/icons/download.png" alt="Download" class="download-btn" />
+            </a>
+            <span class="download-count">14</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        Artist: Unknown<br /> Featuring: Unknown<br /> Length: Unknown<br /> File Size: Unknown
+      </div>
+      <div class="card-tags">
+        <b>Tags:</b>
+        <div class="tags">
+          <div class="tag">Unknown</div>
+          <div class="tag">Unknown</div>
+          <div class="tag">Unknown</div>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+    <br>
+    
+  <div class="container" id="content">
+    <div class="card" data-keywords="#" data-id="remix2">
+      <div class="card-top">
+        <b>Breathe (AlphaByte EDM Remix)</b>
+        <div class="card-icons">
+          <div class="pill">
+            <img src="https://teamalphabyte.github.io/Music/assets/media/icons/play.png" alt="Play" class="play-btn" data-audio="#" />
+            <span class="play-count">10</span>
+          </div>
+          <div class="pill">
+            <a href="#" download>
+              <img src="https://teamalphabyte.github.io/Music/assets/media/icons/download.png" alt="Download" class="download-btn" />
+            </a>
+            <span class="download-count">1</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        Artist: Unknown<br /> Featuring: Unknown<br /> Length: Unknown<br /> File Size: Unknown
+      </div>
+      <div class="card-tags">
+        <b>Tags:</b>
+        <div class="tags">
+          <div class="tag">Unknown</div>
+          <div class="tag">Unknown</div>
+          <div class="tag">Unknown</div>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+    <br>
+    
+  <div class="container" id="content">
+    <div class="card" data-keywords="#" data-id="remix3">
+      <div class="card-top">
+        <b>Devil In Disguise (AlphaByte Remix)</b>
+        <div class="card-icons">
+          <div class="pill">
+            <img src="https://teamalphabyte.github.io/Music/assets/media/icons/play.png" alt="Play" class="play-btn" data-audio="#" />
+            <span class="play-count">133</span>
+          </div>
+          <div class="pill">
+            <a href="#" download>
+              <img src="https://teamalphabyte.github.io/Music/assets/media/icons/download.png" alt="Download" class="download-btn" />
+            </a>
+            <span class="download-count">69</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        Artist: Unknown<br /> Featuring: Unknown<br /> Length: Unknown<br /> File Size: Unknown
+      </div>
+      <div class="card-tags">
+        <b>Tags:</b>
+        <div class="tags">
+          <div class="tag">Unknown</div>
+          <div class="tag">Unknown</div>
+          <div class="tag">Unknown</div>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+    <br>
+    
+  <div class="container" id="content">
+    <div class="card" data-keywords="#" data-id="remix4">
+      <div class="card-top">
+        <b>I Hope (AlphaByte Remix)</b>
+        <div class="card-icons">
+          <div class="pill">
+            <img src="https://teamalphabyte.github.io/Music/assets/media/icons/play.png" alt="Play" class="play-btn" data-audio="#" />
+            <span class="play-count">4</span>
+          </div>
+          <div class="pill">
+            <a href="#" download>
+              <img src="https://teamalphabyte.github.io/Music/assets/media/icons/download.png" alt="Download" class="download-btn" />
+            </a>
+            <span class="download-count">4</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        Artist: Unknown<br /> Featuring: Unknown<br /> Length: Unknown<br /> File Size: Unknown
+      </div>
+      <div class="card-tags">
+        <b>Tags:</b>
+        <div class="tags">
+          <div class="tag">Unknown</div>
+          <div class="tag">Unknown</div>
+          <div class="tag">Unknown</div>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+    
+    <br>
+    
+  <div class="container" id="content">
+    <div class="card" data-keywords="#" data-id="remix5">
+      <div class="card-top">
+        <b>I've Had A Bad Day (AlphaByte EDM Remix)</b>
+        <div class="card-icons">
+          <div class="pill">
+            <img src="https://teamalphabyte.github.io/Music/assets/media/icons/play.png" alt="Play" class="play-btn" data-audio="#" />
+            <span class="play-count">16</span>
+          </div>
+          <div class="pill">
+            <a href="#" download>
+              <img src="https://teamalphabyte.github.io/Music/assets/media/icons/download.png" alt="Download" class="download-btn" />
+            </a>
+            <span class="download-count">2</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        Artist: Unknown<br /> Featuring: Unknown<br /> Length: Unknown<br /> File Size: Unknown
+      </div>
+      <div class="card-tags">
+        <b>Tags:</b>
+        <div class="tags">
+          <div class="tag">Unknown</div>
+          <div class="tag">Unknown</div>
+          <div class="tag">Unknown</div>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+    
+    <br>
+    
+  <div class="container" id="content">
+    <div class="card" data-keywords="#" data-id="remix6">
+      <div class="card-top">
+        <b>I've Had A Bad Day (AlphaByte House Remix)</b>
+        <div class="card-icons">
+          <div class="pill">
+            <img src="https://teamalphabyte.github.io/Music/assets/media/icons/play.png" alt="Play" class="play-btn" data-audio="#" />
+            <span class="play-count">1</span>
+          </div>
+          <div class="pill">
+            <a href="#" download>
+              <img src="https://teamalphabyte.github.io/Music/assets/media/icons/download.png" alt="Download" class="download-btn" />
+            </a>
+            <span class="download-count">0</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        Artist: Unknown<br /> Featuring: Unknown<br /> Length: Unknown<br /> File Size: Unknown
+      </div>
+      <div class="card-tags">
+        <b>Tags:</b>
+        <div class="tags">
+          <div class="tag">Unknown</div>
+          <div class="tag">Unknown</div>
+          <div class="tag">Unknown</div>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+    
+    <br>
+    
+  <div class="container" id="content">
+    <div class="card" data-keywords="#" data-id="remix7">
+      <div class="card-top">
+        <b>Ordinary (AlphaByte Remix)</b>
+        <div class="card-icons">
+          <div class="pill">
+            <img src="https://teamalphabyte.github.io/Music/assets/media/icons/play.png" alt="Play" class="play-btn" data-audio="#" />
+            <span class="play-count">145</span>
+          </div>
+          <div class="pill">
+            <a href="#" download>
+              <img src="https://teamalphabyte.github.io/Music/assets/media/icons/download.png" alt="Download" class="download-btn" />
+            </a>
+            <span class="download-count">90</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        Artist: AlphaByte Music<br /> Featuring: AlphaByte Vocalists<br /> Length: 2:25<br /> File Size: 3.16MB
+      </div>
+      <div class="card-tags">
+        <b>Tags:</b>
+        <div class="tags">
+          <div class="tag">Country</div>
+          <div class="tag">Pop</div>
+          <div class="tag">Soothing</div>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+    
+    <br>
+    
+  <div class="container" id="content">
+    <div class="card" data-keywords="#" data-id="remix8">
+      <div class="card-top">
+        <b>PayDay (AlphaByte Remix)</b>
+        <div class="card-icons">
+          <div class="pill">
+            <img src="https://teamalphabyte.github.io/Music/assets/media/icons/play.png" alt="Play" class="play-btn" data-audio="#" />
+            <span class="play-count">11</span>
+          </div>
+          <div class="pill">
+            <a href="#" download>
+              <img src="https://teamalphabyte.github.io/Music/assets/media/icons/download.png" alt="Download" class="download-btn" />
+            </a>
+            <span class="download-count">3</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        Artist: AlphaByte Music<br /> Featuring: AlphaByte Vocalists<br /> Length: 2:58<br /> File Size: 3.96MB
+      </div>
+      <div class="card-tags">
+        <b>Tags:</b>
+        <div class="tags">
+          <div class="tag">Pop</div>
+          <div class="tag">HipHop</div>
+          <div class="tag">Trap</div>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+    
+    <br>
+    
+  <div class="container" id="content">
+    <div class="card" data-keywords="#" data-id="remix9">
+      <div class="card-top">
+        <b>Soda Pop - English Version (AlphaByte Remix)</b>
+        <div class="card-icons">
+          <div class="pill">
+            <img src="https://teamalphabyte.github.io/Music/assets/media/icons/play.png" alt="Play" class="play-btn" data-audio="#" />
+            <span class="play-count">487</span>
+          </div>
+          <div class="pill">
+            <a href="#" download>
+              <img src="https://teamalphabyte.github.io/Music/assets/media/icons/download.png" alt="Download" class="download-btn" />
+            </a>
+            <span class="download-count">319</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        Artist: AlphaByte Music<br /> Featuring: AlphaByte Vocalists<br /> Length: 2:22<br /> File Size: 3.24MB
+      </div>
+      <div class="card-tags">
+        <b>Tags:</b>
+        <div class="tags">
+          <div class="tag">K-Pop</div>
+          <div class="tag">Pop</div>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+    
+    <br>
+    
+  <div class="container" id="content">
+    <div class="card" data-keywords="#" data-id="remix10">
+      <div class="card-top">
+        <b>Sophia The Princess - Theme Song (AlphaByte Remix)</b>
+        <div class="card-icons">
+          <div class="pill">
+            <img src="https://teamalphabyte.github.io/Music/assets/media/icons/play.png" alt="Play" class="play-btn" data-audio="#" />
+            <span class="play-count">44</span>
+          </div>
+          <div class="pill">
+            <a href="#" download>
+              <img src="https://teamalphabyte.github.io/Music/assets/media/icons/download.png" alt="Download" class="download-btn" />
+            </a>
+            <span class="download-count">12</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        Artist: AlphaByte Music<br /> Featuring: AlphaByte Vocalists<br /> Length: 2:22<br /> File Size: 3.04MB
+      </div>
+      <div class="card-tags">
+        <b>Tags:</b>
+        <div class="tags">
+          <div class="tag">Trance</div>
+          <div class="tag">HardStyle</div>
+          <div class="tag">NightCore</div>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+    
+    <br>
+    
+  <div class="container" id="content">
+    <div class="card" data-keywords="#" data-id="remix11">
+      <div class="card-top">
+        <b>STFU (AlphaByte Remix)</b>
+        <div class="card-icons">
+          <div class="pill">
+            <img src="https://teamalphabyte.github.io/Music/assets/media/icons/play.png" alt="Play" class="play-btn" data-audio="#" />
+            <span class="play-count">110</span>
+          </div>
+          <div class="pill">
+            <a href="#" download>
+              <img src="https://teamalphabyte.github.io/Music/assets/media/icons/download.png" alt="Download" class="download-btn" />
+            </a>
+            <span class="download-count">31</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        Artist: AlphaByte Music<br /> Featuring: AlphaByte Vocalists<br /> Length: 2:50<br /> File Size: 6.51MB
+      </div>
+      <div class="card-tags">
+        <b>Tags:</b>
+        <div class="tags">
+          <div class="tag">Sexy</div>
+          <div class="tag">Seductive</div>
+          <div class="tag">Red Music</div>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+    
+    <br>
+    
+  <div class="container" id="content">
+    <div class="card" data-keywords="#" data-id="remix12">
+      <div class="card-top">
+        <b>Sugar On My Tongue (AlphaByte Remix)</b>
+        <div class="card-icons">
+          <div class="pill">
+            <img src="https://teamalphabyte.github.io/Music/assets/media/icons/play.png" alt="Play" class="play-btn" data-audio="#" />
+            <span class="play-count">585</span>
+          </div>
+          <div class="pill">
+            <a href="#" download>
+              <img src="https://teamalphabyte.github.io/Music/assets/media/icons/download.png" alt="Download" class="download-btn" />
+            </a>
+            <span class="download-count">419</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        Artist: AlphaByte Music<br /> Featuring: AlphaByte Vocalists<br /> Length: 2:47<br /> File Size: 3.56MB
+      </div>
+      <div class="card-tags">
+        <b>Tags:</b>
+        <div class="tags">
+          <div class="tag">Electro-Hop</div>
+          <div class="tag">Sexy</div>
+          <div class="tag">Seductive</div>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+    
+    <br>
+    
+  <div class="container" id="content">
+    <div class="card" data-keywords="#" data-id="remix13">
+      <div class="card-top">
+        <b>Tongue Twister (AlphaByte Remix)</b>
+        <div class="card-icons">
+          <div class="pill">
+            <img src="https://teamalphabyte.github.io/Music/assets/media/icons/play.png" alt="Play" class="play-btn" data-audio="#" />
+            <span class="play-count">69</span>
+          </div>
+          <div class="pill">
+            <a href="#" download>
+              <img src="https://teamalphabyte.github.io/Music/assets/media/icons/download.png" alt="Download" class="download-btn" />
+            </a>
+            <span class="download-count">10</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        Artist: AlphaByte Music<br /> Featuring: AlphaByte Vocalists<br /> Length: 2:59<br /> File Size: 3.96MB
+      </div>
+      <div class="card-tags">
+        <b>Tags:</b>
+        <div class="tags">
+          <div class="tag">EDM</div>
+          <div class="tag">Pop</div>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+</main>
+<footer>
+  <span>Powered by</span>
+  <a href="https://github.com/teamalphabyte">AlphaByte Developments</a>
+</footer>
+<script>
+  let currentAudio = null;
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.play-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const src = btn.getAttribute('data-audio');
+        if (currentAudio && !currentAudio.paused) {
+          currentAudio.pause();
+          currentAudio = null;
+          btn.setAttribute('alt', 'Play');
+          return;
+        }
+        if (currentAudio) {
+          currentAudio.pause();
+          currentAudio = null;
+        }
+        currentAudio = new Audio(src);
+        currentAudio.play();
+        btn.setAttribute('alt', 'Pause');
+      });
+    });
+    document.querySelectorAll('.download-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const link = document.createElement('a');
+        link.href = btn.getAttribute('data-audio');
+        link.download = '';
+        link.click();
+      });
+    });
+    const search = document.getElementById('search');
+    search.addEventListener('input', () => {
+      const term = search.value.toLowerCase();
+      document.querySelectorAll('.card').forEach(card => {
+        const match = card.getAttribute('data-keywords').toLowerCase().includes(term);
+        card.style.display = match ? 'block' : 'none';
+      });
+    });
+  });
+</script>
 
+</body>
+</html>
